@@ -1,3 +1,6 @@
+#python -m uvicorn src.api:app --reload --port 8000
+#http://127.0.0.1:8000/docs
+
 import contextlib
 from pathlib import Path
 import joblib
@@ -75,7 +78,13 @@ def healthcheck():
       "models_loaded": len(model_artifacts["lgbm_models"]) == 5,
   }
 
-
+@app.get("/version")
+def get_version():
+  return {
+      "service": "Loan Approval Inference Service",
+      "api_version": "1.0.0",
+      "champion_ensemble_weights": {"lightgbm": 0.68, "xgboost": 0.32},
+  }
 # ---------------------------------------------------------------------------
 # 4. Prediction Scoring Endpoint
 # ---------------------------------------------------------------------------
