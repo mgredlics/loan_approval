@@ -13,7 +13,6 @@ mlruns/
 
 # Raw data (optional, best practice for large CSVs)
 data/
-reports/
 *.csv
 
 # Word Doc Files
