@@ -13,6 +13,7 @@ mlruns/
 
 # Raw data (optional, best practice for large CSVs)
 data/
+src_overcomments/
 *.csv
 
 # Word Doc Files
