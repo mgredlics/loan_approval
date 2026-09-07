@@ -16,5 +16,10 @@ data/
 src_overcomments/
 *.csv
 
+# Model binaries
+models/
+*.joblib
+*.pkl
+
 # Word Doc Files
 *.docx

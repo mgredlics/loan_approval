@@ -70,6 +70,15 @@ with mlflow.start_run(run_name="challenger_lightgbm_5fold"):
             callbacks=[]
         )
 
+        # Ensure local models directory exists
+        Path("models").mkdir(exist_ok=True)
+        
+        # Save model to disk and log as artifact
+        model_path = f"models/lgbm_fold_{fold}.joblib"
+        import joblib
+        joblib.dump(model, model_path)
+        mlflow.log_artifact(model_path, artifact_path="models")
+
         val_probs = model.predict_proba(X_va)[:, 1]
         oof_preds[val_idx] = val_probs
         test_preds += model.predict_proba(X_test)[:, 1] / skf.n_splits

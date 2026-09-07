@@ -1,6 +1,7 @@
 import os
 import warnings
 from pathlib import Path
+import joblib
 import numpy as np
 import pandas as pd
 import mlflow
@@ -58,6 +59,9 @@ test_preds = np.zeros(len(test_df))
 
 with mlflow.start_run(run_name="final_tuned_xgboost_5fold"):
     mlflow.log_params(best_params)
+
+    joblib.dump(preprocessor, "models/xgb_preprocessor.joblib")
+    mlflow.log_artifact("models/xgb_preprocessor.joblib", artifact_path="models")
     
     for fold, (train_idx, val_idx) in enumerate(skf.split(X_tr_proc, y), start=1):
         X_train_fold, y_train_fold = X_tr_proc[train_idx], y.iloc[train_idx]
@@ -65,6 +69,16 @@ with mlflow.start_run(run_name="final_tuned_xgboost_5fold"):
         
         model = XGBClassifier(**best_params)
         model.fit(X_train_fold, y_train_fold)
+
+        
+        # Ensure local models directory exists
+        Path("models").mkdir(exist_ok=True)
+        
+        # Save model to disk and log as artifact
+        model_path = f"models/xgb_fold_{fold}.joblib"
+        import joblib
+        joblib.dump(model, model_path)
+        mlflow.log_artifact(model_path, artifact_path="models")
         
         oof_preds[val_idx] = model.predict_proba(X_val_fold)[:, 1]
         test_preds += model.predict_proba(X_te_proc)[:, 1] / skf.n_splits
