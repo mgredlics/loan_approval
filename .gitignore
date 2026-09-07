@@ -1,0 +1,20 @@
+# Python environment and bytecode
+__pycache__/
+*.py[cod]
+.venv/
+env/
+
+# MLflow tracking stores and database
+mlflow.db
+mlruns/
+
+# IDE settings
+.vscode/
+
+# Raw data (optional, best practice for large CSVs)
+data/
+reports/
+*.csv
+
+# Word Doc Files
+*.docx
